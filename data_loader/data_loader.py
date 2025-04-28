@@ -34,7 +34,7 @@ def split_series(df, lookback, train_ratio=0.7, val_ratio=0.15):
     n = len(df)
     train_end = int(n * train_ratio)
     val_end = int(n * (train_ratio + val_ratio))
-    return df[:train_end], df[train_end-lookback:val_end], df[val_end:]
+    return df[:train_end], df[train_end-lookback:val_end], df[val_end-lookback:]
 
 
 class TimeSeriesDataset(Dataset):

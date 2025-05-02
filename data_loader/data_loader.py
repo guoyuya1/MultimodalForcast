@@ -4,14 +4,14 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 
 
-def process_bitcoin_data(ts_file_path, news_file_path, start_date, end_date, text_col='full_article', channel_id='price'):
+def process_bitcoin_data(ts_file_path, news_file_path, start_date, end_date, text_col='full_article', text_time_col='publication_time', channel_id='price'):
     # Read the files
     df_daily = pd.read_csv(ts_file_path)
     df_daily['TIME'] = pd.to_datetime(df_daily['TIME']).dt.date
     with open(news_file_path, 'r') as f:
         news_data = json.load(f)
     df_news = pd.DataFrame(news_data)
-    df_news['publication_date'] = pd.to_datetime(df_news['publication_time']).dt.date
+    df_news['publication_date'] = pd.to_datetime(df_news[text_time_col]).dt.date
 
     # Group text by date and concatenate
     df_news_grouped = df_news.groupby('publication_date')[text_col].apply(lambda x: ' '.join(x)).reset_index()
